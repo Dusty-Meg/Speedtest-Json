@@ -19,7 +19,7 @@ ARG USER_GID=$USER_UID
 # Uncomment the following COPY line and the corresponding lines in the `RUN` command if you wish to
 # include your requirements in the image itself. It is suggested that you only do this if your
 # requirements rarely (if ever) change.
-COPY requirements.txt /tmp/pip-tmp/
+COPY app/requirements.txt /tmp/pip-tmp/
 
 # Configure apt and install packages
 RUN apt-get update \
@@ -51,15 +51,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install speedtest in dev container
-RUN adduser -D speedtest
-RUN pip install -r requirements.txt && \
-    export ARCHITECTURE=$(uname -m) && \
+RUN export ARCHITECTURE=$(uname -m) && \
     if [ "$ARCHITECTURE" == 'armv7l' ]; then export ARCHITECTURE=arm; fi && \
     wget -O /tmp/speedtest.tgz "https://install.speedtest.net/app/cli/ookla-speedtest-1.0.0-${ARCHITECTURE}-linux.tgz" && \
     tar zxvf /tmp/speedtest.tgz -C /tmp && \
-    cp /tmp/speedtest /usr/local/bin && \
-
-RUN chown -R speedtest:speedtest /app
+    cp /tmp/speedtest /usr/local/bin
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
