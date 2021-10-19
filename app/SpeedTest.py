@@ -33,7 +33,7 @@ def test():
         if not is_json(output):
             if len(output) > 0:
                 print('Speedtest CLI Error occurred that' +
-                      'was not in JSON format')
+                      'was not in JSON format!')
                 print(output)
             return (0, 0, 0, 0, 0, 0)
     except subprocess.TimeoutExpired:
